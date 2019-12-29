@@ -2,6 +2,6 @@ require './config/environment'
 
 
 use Rack::MethodOverride
-#use ListingsController
+use ItemsController
 #use UsersController
 run ApplicationController
