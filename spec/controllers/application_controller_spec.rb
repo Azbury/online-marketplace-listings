@@ -17,7 +17,7 @@ describe ApplicationController do
       expect(last_response.status).to eq(200)
     end
 
-    it 'signup directs user to twitter index' do
+    it 'signup directs user to listing index' do
       params = {
         :username => "skittles123",
         :email => "skittles@aol.com",
