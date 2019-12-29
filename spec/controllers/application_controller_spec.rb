@@ -138,4 +138,18 @@ describe ApplicationController do
       expect(page.current_path).to eq('/items')
     end
   end
+
+  describe 'user show page' do
+    it 'shows all a single users items' do
+      user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+      item1 = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user.id)
+      item2 = Item.create(:title => "bird cage", :description => "keep that bird locked up", :price => "$50", :user_id => user.id)
+      get "/users/#{user.slug}"
+
+      expect(last_response.body).to include("bird")
+      expect(last_response.body).to include("bird cage")
+
+    end
+  end
+
 end
