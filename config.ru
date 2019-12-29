@@ -3,5 +3,5 @@ require './config/environment'
 
 use Rack::MethodOverride
 use ItemsController
-#use UsersController
+use UsersController
 run ApplicationController
