@@ -70,4 +70,34 @@ describe ApplicationController do
     end
   end
 
+  describe "login" do
+    it 'loads the login page' do
+      get '/login'
+      expect(last_response.status).to eq(200)
+    end
+
+    it 'loads the items index after login' do
+      user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+      params = {
+        :username => "becky567",
+        :password => "kittens"
+      }
+      post '/login', params
+      expect(last_response.status).to eq(302)
+      follow_redirect!
+      expect(last_response.status).to eq(200)
+    end
+
+    it 'does not let user view login page if already logged in' do
+      user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+      params = {
+        :username => "becky567",
+        :password => "kittens"
+      }
+      post '/login', params
+      get '/login'
+      expect(last_response.location).to include("/items")
+    end
+  end
 end
