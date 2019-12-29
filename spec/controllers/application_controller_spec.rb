@@ -100,4 +100,42 @@ describe ApplicationController do
       expect(last_response.location).to include("/items")
     end
   end
+
+  describe "logout" do
+    it "lets a user logout if they are already logged in and redirects to the login page" do
+      user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+      params = {
+        :username => "becky567",
+        :password => "kittens"
+      }
+      post '/login', params
+      get '/logout'
+      expect(last_response.location).to include("/login")
+    end
+
+    it 'redirects a user to the index page if the user tries to access /logout while not logged in' do
+      get '/logout'
+      expect(last_response.location).to include("/")
+
+    end
+
+    it 'redirects a user to the login route if a user tries to access /items route if user not logged in' do
+      get '/items'
+      expect(last_response.location).to include("/login")
+      expect(last_response.status).to eq(302)
+    end
+
+    it 'loads /items if user is logged in' do
+      user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+
+      visit '/login'
+
+      fill_in(:username, :with => "becky567")
+      fill_in(:password, :with => "kittens")
+      click_button 'submit'
+      expect(page.current_path).to eq('/items')
+    end
+  end
 end
