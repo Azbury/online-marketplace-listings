@@ -152,4 +152,32 @@ describe ApplicationController do
     end
   end
 
+  describe 'index action' do
+    context 'logged in' do
+      it 'lets a user view the items index if logged in' do
+        user1 = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        item1 = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user1.id)
+
+        user2 = User.create(:username => "silverstallion", :email => "silver@aol.com", :password => "horses")
+        item2 = Item.create(:title => "bird cage", :description => "keep that bird locked up", :price => "$50", :user_id => user2.id)
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit "/items"
+        expect(page.body).to include(item1.title)
+        expect(page.body).to include(item2.title)
+      end
+    end
+
+    context 'logged out' do
+      it 'does not let a user view the items index if not logged in' do
+        get '/items'
+        expect(last_response.location).to include("/login")
+      end
+    end
+  end
+
 end
