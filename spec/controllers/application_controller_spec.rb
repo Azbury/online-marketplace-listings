@@ -193,6 +193,27 @@ describe ApplicationController do
         visit '/items/new'
         expect(page.status_code).to eq(200)
       end
+
+      it 'lets a user create a new item if logged in' do
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit '/items/new'
+        fill_in(:title, :with => "dog")
+        fill_in(:description, :with => "goes woof woof")
+        fill_in(:price, :with => "$200")
+        click_button 'submit'
+
+        user = User.find_by(:username => "becky567")
+        item = Item.find_by(:title => "dog")
+        expect(item).to be_instance_of(Item)
+        expect(item.user_id).to eq(user.id)
+        expect(page.status_code).to eq(200)
+      end
     end
   end
 
