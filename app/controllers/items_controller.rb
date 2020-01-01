@@ -17,4 +17,13 @@ class ItemsController < ApplicationController
     end
   end
 
+  post '/items' do
+    if params[:title] == "" || params[:description] == "" || params[:price] == ""
+      redirect '/items/new'
+    else
+      Item.create(title: params[:title], description: params[:description], price: params[:price], user_id: session[:user_id])
+      redirect '/items'
+    end
+  end
+
 end
