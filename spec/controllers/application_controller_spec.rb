@@ -214,6 +214,29 @@ describe ApplicationController do
         expect(item.user_id).to eq(user.id)
         expect(page.status_code).to eq(200)
       end
+
+      it 'does not let a user create a new item from another users account' do
+        user1 = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        user2 = User.create(:username => "silverstallion", :email => "silver@aol.com", :password => "horses")
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit '/items/new'
+        fill_in(:title, :with => "dog")
+        fill_in(:description, :with => "goes woof woof")
+        fill_in(:price, :with => "$200")
+        click_button 'submit'
+
+        user1 = User.find_by(:id => user1.id)
+        user2 = User.find_by(:id => user2.id)
+        item = Item.find_by(:title => "dog")
+        expect(item).to be_instance_of(Item)
+        expect(item.user_id).to eq(user1.id)
+        expect(item.user_id).not_to eq(user2.id)
+      end
     end
   end
 
