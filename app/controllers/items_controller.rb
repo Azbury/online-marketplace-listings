@@ -9,4 +9,12 @@ class ItemsController < ApplicationController
     end
   end
 
+  get '/items/new' do
+    if session[:user_id] == nil
+      redirect '/login'
+    else
+      erb :'/items/new'
+    end
+  end
+
 end
