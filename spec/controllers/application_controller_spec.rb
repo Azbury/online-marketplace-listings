@@ -180,4 +180,20 @@ describe ApplicationController do
     end
   end
 
+  describe 'new action' do
+    context 'logged in' do
+      it 'lets user view new item if logged in' do
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit '/items/new'
+        expect(page.status_code).to eq(200)
+      end
+    end
+  end
+
 end
