@@ -372,12 +372,57 @@ describe ApplicationController do
       end
     end
 
-  context "logged out" do
-    it 'does not load -- requests user to login' do
-      get '/items/1/edit'
-      expect(last_response.location).to include("/login")
+    context "logged out" do
+      it 'does not load -- requests user to login' do
+        get '/items/1/edit'
+        expect(last_response.location).to include("/login")
+      end
     end
   end
-end
+
+describe 'delete action' do
+    context "logged in" do
+      it 'lets a user delete their own item if they are logged in' do
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        item = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user.id)
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit 'items/1'
+        click_button "Delete Item"
+        expect(page.status_code).to eq(200)
+        expect(Item.find_by(:title => "bird")).to eq(nil)
+      end
+
+      it 'does not let a user delete an item they did not create' do
+        user1 = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        item1 = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user1.id)
+
+        user2 = User.create(:username => "silverstallion", :email => "silver@aol.com", :password => "horses")
+        item2 = Item.create(:title => "bird cage", :description => "keep that bird locked up", :price => "$50", :user_id => user2.id)
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+        visit "items/#{item2.id}"
+        click_button "Delete Item"
+        expect(page.status_code).to eq(200)
+        expect(Item.find_by(:title => "bird cage")).to be_instance_of(Item)
+        expect(page.current_path).to include('/items')
+      end
+    end
+
+    context "logged out" do
+      it 'does not load let user delete an item if not logged in' do
+        item = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => 1)
+        visit '/items/1'
+        expect(page.current_path).to eq("/login")
+      end
+    end
+  end
 
 end
