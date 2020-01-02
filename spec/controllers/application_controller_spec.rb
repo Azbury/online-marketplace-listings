@@ -237,6 +237,26 @@ describe ApplicationController do
         expect(item.user_id).to eq(user1.id)
         expect(item.user_id).not_to eq(user2.id)
       end
+
+      it 'does not let a user create a blank item' do
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+
+        visit '/items/new'
+
+        fill_in(:title, :with => "")
+        fill_in(:description, :with => "goes woof woof")
+        fill_in(:price, :with => "$200")
+        click_button 'submit'
+
+        expect(Item.find_by(:title => "")).to eq(nil)
+        expect(page.current_path).to eq("/items/new")
+      end
     end
   end
 
