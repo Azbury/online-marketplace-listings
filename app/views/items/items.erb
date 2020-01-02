@@ -1,5 +1,7 @@
 <h1>Take a look at the fine items for sale...</h1>
-<a class='button' href='items/new'>List a new item for sale</a>
+<a class='button' href='/items/new'>List a new item for sale</a><br>
 <%@items.each do |item|%>
   <li><a class='button' href='/items/<%=item.id%>'><%=item.title%></a></li>
 <%end%>
+<a class="button" href="/users/<%= @user.slug%>">Go to your profile...</a><br>
+<a class='button' href='/logout'>Logout</a>
