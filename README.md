@@ -12,6 +12,7 @@ This Ruby Program creates a website that allows you to signup for an account and
 
 Type command below and go the link provided by the command.
 
+    $ rake db:migrate
     $ shotgun
 
 ## Contributing
