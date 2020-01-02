@@ -1,5 +1,5 @@
 <h1>Take a look at the fine items for sale...</h1>
 <a class='button' href='items/new'>List a new item for sale</a>
 <%@items.each do |item|%>
-  <li><a class='button' href='/items/item.id'><%=item.title%></a></li>
+  <li><a class='button' href='/items/<%=item.id%>'><%=item.title%></a></li>
 <%end%>
