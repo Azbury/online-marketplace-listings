@@ -315,7 +315,7 @@ describe ApplicationController do
 
       it 'does not let a user edit a item they did not create' do
         user1 = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
-        item1 = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user.id)
+        item1 = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user1.id)
 
         user2 = User.create(:username => "silverstallion", :email => "silver@aol.com", :password => "horses")
         item2 = Item.create(:title => "bird cage", :description => "keep that bird locked up", :price => "$50", :user_id => user2.id)
@@ -326,9 +326,9 @@ describe ApplicationController do
         fill_in(:password, :with => "kittens")
         click_button 'submit'
         visit "items/#{item2.id}"
-        click_on "Edit Tweet"
+        click_on "Edit Item"
         expect(page.status_code).to eq(200)
-        expect(Item.find_by(:title => "bird cage")).to be_instance_of(Tweet)
+        expect(Item.find_by(:title => "bird cage")).to be_instance_of(Item)
         expect(page.current_path).to include('/items')
       end
 
@@ -347,7 +347,7 @@ describe ApplicationController do
         fill_in(:price, :with => "$1000")
 
         click_button 'submit'
-        expect(Item.find_by(:title => "cow")).to be_instance_of(Tweet)
+        expect(Item.find_by(:title => "cow")).to be_instance_of(Item)
         expect(Item.find_by(:title => "bird")).to eq(nil)
         expect(page.status_code).to eq(200)
       end
@@ -367,7 +367,7 @@ describe ApplicationController do
         fill_in(:price, :with => "$1000")
 
         click_button 'submit'
-        expect(Tweet.find_by(:title => "cow")).to be(nil)
+        expect(Item.find_by(:title => "cow")).to be(nil)
         expect(page.current_path).to eq("/items/1/edit")
       end
     end

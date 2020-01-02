@@ -44,4 +44,17 @@ class ItemsController < ApplicationController
     end
   end
 
+  patch '/items/:id' do #edit action
+    if params[:title] == "" || params[:description] == "" || params[:price] == ""
+      redirect "/items/#{params[:id]}/edit"
+    else
+      @item = Item.find_by_id(params[:id])
+      @item.title = params[:title]
+      @item.description = params[:description]
+      @item.price = params[:price]
+      @item.save
+      redirect "/items/#{@item.id}"
+    end
+  end
+
 end
