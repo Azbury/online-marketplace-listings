@@ -267,4 +267,35 @@ describe ApplicationController do
     end
   end
 
+  describe 'show action' do
+    context 'logged in' do
+      it 'displays a single item' do
+
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        item = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user.id)
+
+        visit '/login'
+
+        fill_in(:username, :with => "becky567")
+        fill_in(:password, :with => "kittens")
+        click_button 'submit'
+
+        visit "/items/#{item.id}"
+        expect(page.status_code).to eq(200)
+        expect(page.body).to include("Delete Item")
+        expect(page.body).to include(item.title)
+        expect(page.body).to include("Edit Item")
+      end
+    end
+
+    context 'logged out' do
+      it 'does not let a user view a item' do
+        user = User.create(:username => "becky567", :email => "starz@aol.com", :password => "kittens")
+        item = Item.create(:title => "bird", :description => "makes bird sounds", :price => "$100", :user_id => user.id)
+        get "/items/#{item.id}"
+        expect(last_response.location).to include("/login")
+      end
+    end
+  end
+
 end
