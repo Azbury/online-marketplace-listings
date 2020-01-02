@@ -30,6 +30,7 @@ class ItemsController < ApplicationController
     if session[:user_id] == nil
       redirect '/login'
     else
+      @user = User.find_by_id(session[:user_id])
       @item = Item.find_by_id(params[:id])
       erb :'/items/show'
     end
