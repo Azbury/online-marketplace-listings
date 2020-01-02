@@ -258,6 +258,13 @@ describe ApplicationController do
         expect(page.current_path).to eq("/items/new")
       end
     end
+
+    context 'logged out' do
+      it 'does not let user view new item form if not logged in' do
+        get '/items/new'
+        expect(last_response.location).to include("/login")
+      end
+    end
   end
 
 end
