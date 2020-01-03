@@ -1,6 +1,7 @@
+#Controller for the item routes. Can view, create, edit, and delete all items
 class ItemsController < ApplicationController
 
-  get '/items' do
+  get '/items' do #item index route
     if session[:user_id] == nil
       redirect '/login'
     else
@@ -10,7 +11,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  get '/items/new' do
+  get '/items/new' do #create action
     if session[:user_id] == nil
       redirect '/login'
     else
@@ -18,7 +19,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  post '/items' do
+  post '/items' do #create action
     if params[:title] == "" || params[:description] == "" || params[:price] == ""
       redirect '/items/new'
     else
@@ -27,7 +28,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  get '/items/:id' do
+  get '/items/:id' do #show action
     if session[:user_id] == nil
       redirect '/login'
     else
@@ -37,7 +38,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  get '/items/:id/edit' do
+  get '/items/:id/edit' do #edit action
     if session[:user_id] == nil
       redirect '/login'
     else

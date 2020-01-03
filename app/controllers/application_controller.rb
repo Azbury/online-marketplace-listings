@@ -1,5 +1,5 @@
 require './config/environment'
-
+#Main controller, can view initial route, allows users to sign up, sign in, and sign out.
 class ApplicationController < Sinatra::Base
 
   configure do
@@ -9,11 +9,11 @@ class ApplicationController < Sinatra::Base
     set :session_secret, "secret"
   end
 
-  get '/' do
+  get '/' do #initial route
     erb :index
   end
 
-  get '/signup' do
+  get '/signup' do #sign up action
     if session[:user_id] != nil
       redirect '/items'
     else
@@ -21,7 +21,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  post '/signup' do
+  post '/signup' do #sign up action
     if params["username"] == "" || params["email"] == "" || params["password"] == ""
       redirect '/signup'
     else
@@ -32,7 +32,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  get '/login' do
+  get '/login' do #login action
     if session[:user_id] != nil
       redirect '/items'
     else
@@ -40,7 +40,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  post '/login' do
+  post '/login' do #login action
     @user = User.find_by(:username => params[:username])
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
@@ -50,7 +50,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  get '/logout' do
+  get '/logout' do #logout action
     if session[:user_id] == nil
       redirect '/'
     else
@@ -59,7 +59,7 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  post '/logout' do
+  post '/logout' do #logout action
     session.clear
     redirect '/login'
   end
