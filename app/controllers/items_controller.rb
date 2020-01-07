@@ -25,8 +25,7 @@ class ItemsController < ApplicationController
     if params[:title] == "" || params[:description] == "" || params[:price] == ""
       redirect '/items/new'
     else
-      #Item.create(title: params[:title], description: params[:description], price: params[:price], user_id: session[:user_id])
-      User.find_by_id(session[:user_id]).items.create(title: params[:title], description: params[:description], price: params[:price])
+      current_user.items.create(title: params[:title], description: params[:description], price: params[:price])
       redirect '/items'
     end
   end
