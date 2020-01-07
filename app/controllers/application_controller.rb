@@ -77,7 +77,10 @@ class ApplicationController < Sinatra::Base
     def logged_in?
       session[:user_id] != nil
     end
-  #  auth_for_edit?
+
+    def auth_for_control? (item)
+      item.user_id == session[:user_id]
+    end
   end
 
 end

@@ -52,20 +52,24 @@ class ItemsController < ApplicationController
       redirect "/items/#{params[:id]}/edit"
     else
       @item = Item.find_by_id(params[:id])
-      @item.title = params[:title]
-      @item.description = params[:description]
-      @item.price = params[:price]
-      @item.save
-      redirect "/items/#{@item.id}"
+      if auth_for_control?(@item)
+        @item.title = params[:title]
+        @item.description = params[:description]
+        @item.price = params[:price]
+        @item.save
+        redirect "/items/#{@item.id}"
+      else
+        redirect "/items/#{@item.id}/edit"
+      end
     end
   end
 
   delete '/items/:id' do #delete action
     @item = Item.find_by_id(params[:id])
-    if @item.user_id != session[:user_id]
+    if auth_for_control?(@item)
+      @item.delete
       redirect '/items'
     else
-      @item.delete
       redirect '/items'
     end
   end
