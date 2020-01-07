@@ -1,11 +1,13 @@
 #Controller for the item routes. Can view, create, edit, and delete all items
 class ItemsController < ApplicationController
 
+  #helper_method :session_user_id
+
   get '/items' do #item index route
     if session[:user_id] == nil
       redirect '/login'
     else
-      @user = User.find_by_id(session[:user_id])
+      @user = session_user_id
       @items = Item.all
       erb :'/items/items'
     end
@@ -23,7 +25,8 @@ class ItemsController < ApplicationController
     if params[:title] == "" || params[:description] == "" || params[:price] == ""
       redirect '/items/new'
     else
-      Item.create(title: params[:title], description: params[:description], price: params[:price], user_id: session[:user_id])
+      #Item.create(title: params[:title], description: params[:description], price: params[:price], user_id: session[:user_id])
+      User.find_by_id(session[:user_id]).items.create(title: params[:title], description: params[:description], price: params[:price])
       redirect '/items'
     end
   end

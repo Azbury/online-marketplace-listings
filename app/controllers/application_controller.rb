@@ -2,12 +2,16 @@ require './config/environment'
 #Main controller, can view initial route, allows users to sign up, sign in, and sign out.
 class ApplicationController < Sinatra::Base
 
+  @@user
+
   configure do
     set :public_folder, 'public'
     set :views, 'app/views'
     enable :sessions
     set :session_secret, "secret"
   end
+
+  #helper_method :session_user_id
 
   get '/' do #initial route
     erb :index
@@ -68,4 +72,15 @@ class ApplicationController < Sinatra::Base
     session.clear
     redirect '/login'
   end
+
+  helpers do
+    def current_user
+        @user ||= User.find_by_id (session[:user_id]) if session[:user_id]
+    end
+
+  #  logged_in?
+
+  #  auth_for_edit?
+  end
+
 end

@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :items
 
+  validates :username => :presence
+
   #creates slug based on username
   def slug
     self.username.split(" ").join("-").downcase
