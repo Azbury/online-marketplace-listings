@@ -2,7 +2,7 @@
 class ItemsController < ApplicationController
 
   get '/items' do #item index route
-    if session[:user_id] == nil
+    if !logged_in?
       redirect '/login'
     else
       @user = current_user
@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
   end
 
   get '/items/new' do #create action
-    if session[:user_id] == nil
+    if !logged_in?
       redirect '/login'
     else
       erb :'/items/new'
@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
   end
 
   get '/items/:id' do #show action
-    if session[:user_id] == nil
+    if !logged_in?
       redirect '/login'
     else
       @user = current_user
@@ -39,7 +39,7 @@ class ItemsController < ApplicationController
   end
 
   get '/items/:id/edit' do #edit action
-    if session[:user_id] == nil
+    if !logged_in?
       redirect '/login'
     else
       @item = Item.find_by_id(params[:id])

@@ -14,7 +14,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/signup' do #sign up action
-    if session[:user_id] != nil
+    if logged_in?
       redirect '/items'
     else
       erb :signup
@@ -38,7 +38,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/login' do #login action
-    if session[:user_id] != nil
+    if logged_in?
       redirect '/items'
     else
       erb :login
@@ -56,7 +56,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/logout' do #logout action
-    if session[:user_id] == nil
+    if !logged_in?
       redirect '/'
     else
       session.clear
@@ -74,8 +74,9 @@ class ApplicationController < Sinatra::Base
       @user ||= User.find_by_id (session[:user_id]) if session[:user_id]
     end
 
-  #  logged_in?
-
+    def logged_in?
+      session[:user_id] != nil
+    end
   #  auth_for_edit?
   end
 
