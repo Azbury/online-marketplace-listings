@@ -25,10 +25,15 @@ class ApplicationController < Sinatra::Base
     if params["username"] == "" || params["email"] == "" || params["password"] == ""
       redirect '/signup'
     else
-      @user = User.new(username: params["username"], email: params["email"], password: params["password"])
-      @user.save
-      session[:user_id] = @user.id
-      redirect '/items'
+      #does not allow user to make an account with the same username as another account
+      if User.find_by(username: params["username"])
+        redirect '/signup'
+      else
+        @user = User.new(username: params["username"], email: params["email"], password: params["password"])
+        @user.save
+        session[:user_id] = @user.id
+        redirect '/items'
+      end
     end
   end
 
