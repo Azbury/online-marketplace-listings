@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :items
 
-  validates :username => :presence
+  validates :username, presence: true
 
   #creates slug based on username
   def slug

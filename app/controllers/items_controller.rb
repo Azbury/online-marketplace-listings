@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
     if session[:user_id] == nil
       redirect '/login'
     else
-      @user = session_user_id
+      @user = current_user
       @items = Item.all
       erb :'/items/items'
     end
@@ -35,7 +35,7 @@ class ItemsController < ApplicationController
     if session[:user_id] == nil
       redirect '/login'
     else
-      @user = User.find_by_id(session[:user_id])
+      @user = current_user
       @item = Item.find_by_id(params[:id])
       erb :'/items/show'
     end
