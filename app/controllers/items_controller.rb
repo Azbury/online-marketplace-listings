@@ -1,8 +1,6 @@
 #Controller for the item routes. Can view, create, edit, and delete all items
 class ItemsController < ApplicationController
 
-  #helper_method :session_user_id
-
   get '/items' do #item index route
     if session[:user_id] == nil
       redirect '/login'
